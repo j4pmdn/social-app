@@ -1,6 +1,8 @@
 package com.hdoan.controller;
 
 import com.hdoan.models.User;
+import com.hdoan.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -8,6 +10,22 @@ import java.util.List;
 
 @RestController
 public class UserController {
+
+    @Autowired
+    UserRepository userRepository;
+
+    @PostMapping("/users")
+    public User createUser(@RequestBody User user){
+        User newUser = new User();
+        newUser.setEmail(user.getEmail());
+        newUser.setFirstName(user.getFirstName());
+        newUser.setLastName(user.getLastName());
+        newUser.setPassword(user.getPassword());
+        newUser.setId(user.getId());
+
+        User savedUser = userRepository.save(newUser);
+        return savedUser;
+    }
 
     @GetMapping("/users")
     public List<User> getUsers(){
@@ -25,17 +43,6 @@ public class UserController {
 
         user1.setId(id);
         return user1;
-    }
-
-    @PostMapping("/users")
-    public User createUser(@RequestBody User user){
-        User newUser = new User();
-        newUser.setEmail(user.getEmail());
-        newUser.setFirstName(user.getFirstName());
-        newUser.setLastName(user.getLastName());
-        newUser.setPassword(user.getPassword());
-        newUser.setId(user.getId());
-        return newUser;
     }
 
     @PutMapping("/users")
